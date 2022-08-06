@@ -1,12 +1,11 @@
 """Module that starts the Tk mainloop"""
-from tkinter import *
-
+from tkinter import Tk
 from window import MainWindow
 
+def main():
+    tk = Tk()
+    MainWindow(tk)
+    tk.mainloop()    
 
 if __name__ == "__main__":
-    tk = Tk()
-
-    MainWindow(tk)
-
-    tk.mainloop()
+    main()
