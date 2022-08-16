@@ -1,7 +1,7 @@
 """Module with the canvas class. This is where the animation will
 happen"""
 from tkinter import *
-from math import radians, sin, cos
+from math import sin, cos
 
 class ProjectileMotionAnimation(Canvas):
 
