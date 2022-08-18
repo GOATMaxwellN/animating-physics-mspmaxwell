@@ -21,6 +21,9 @@ class ProjectileMotionAnimation(Canvas):
         self.no_of_frames = None
         self.total_no_of_frames = None
 
+        self.time_to_total_frames_multiplier = 20
+        self.upc = 5  # unit to pixel conversion
+
     def setup_canvas(self):
         """Draw all needed components for the projectile motion 
         animation"""
@@ -32,7 +35,8 @@ class ProjectileMotionAnimation(Canvas):
         w, h = self.winfo_width(), self.winfo_height()
         # Set floor height
         self.floor_height = h - 10
-        self.create_rectangle(0, self.floor_height, w, h, fill='sienna3', outline='sienna3')
+        self.create_rectangle(
+            0, self.floor_height, w, h, fill='sienna3', outline='sienna3')
 
     def draw_ball(self):
         """Draw ball on top of the floor"""
@@ -53,7 +57,8 @@ class ProjectileMotionAnimation(Canvas):
         self.total_time = self.v_vel / ((1/2)*self.g)
 
         self.no_of_frames = 0
-        self.total_no_of_frames = round(self.total_time * 20)
+        self.total_no_of_frames = \
+            round(self.total_time * self.time_to_total_frames_multiplier)
         self.time_step = self.total_time / self.total_no_of_frames
         self.time = self.time_step
 
@@ -67,8 +72,9 @@ class ProjectileMotionAnimation(Canvas):
             return  
 
         # x and y displacement
-        x_disp = (self.h_vel * self.time) * 5
-        y_disp = ((self.v_vel*self.time) + ((1/2)*-self.g*(self.time**2))) * 5
+        x_disp = (self.h_vel * self.time) * self.upc
+        y_disp = ((self.v_vel*self.time)
+                 + ((1/2)*-self.g*(self.time**2))) * self.upc
 
         # Get the starting coordinates of the ball
         # tl = top left    # br = bottom right
