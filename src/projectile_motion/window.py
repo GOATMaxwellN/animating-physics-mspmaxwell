@@ -5,6 +5,20 @@ from configs import ProjectileMotionConfigs
 
 
 class MainWindow:
+    """Handles layout of the root window.
+
+    This class takes the root Tk() window and handles placing the
+    Canvas (where the animation occurs), and Frame (where user can
+    modify the animation) on the root window.
+
+    root : Tk
+        Root window.
+    animation : ProjectileMotionAnimation
+        Canvas widget that handles drawing the animation.
+    configs : ProjectileMotionConfigs
+        Frame widget that holds interface to interact with the
+        animation.
+    """
 
     def __init__(self, root: Tk):
         self.root = root  # root is the Tk instance

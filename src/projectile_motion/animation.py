@@ -4,6 +4,56 @@ from tkinter import *
 from math import sin, cos
 
 class ProjectileMotionAnimation(Canvas):
+    """The Canvas widget that draws the animation.
+
+    This class acts as the Canvas widget as well as the facilitator to
+    the animation. All the functions that handle drawing the animation
+    are encapsulated within this Canvas widget.
+
+    Attributes
+    ----------
+    ball : int
+        Object ID for the ball drawn on the canvas.
+    diameter : int
+        Diameter of the ball.
+    offset : int
+        Offset from the left edge of the canvas for the ball's default
+        position.
+    floor : int
+        Object ID for the floor drawn on the canvas.
+    floor_height : int
+        Y-coordinate of the top left point of the floor.
+    animation_running : bool
+        True when animation is running, False otherwise.
+    h_vel : float
+        Initial horizontal velocity of ball.
+    v_vel : float
+        Initial vertical velocity of ball.
+    g : float
+        Gravitational acceleration.
+    total_time : float
+        Time taken for the ball to hit the floor after launch. Reflects
+        time in the real world and is not related to how long the
+        animation will take.
+    total_no_of_frames : int
+        Total number of frames that the animation will take.
+    no_of_frames : int
+        Tracks what frame the animation is on.
+    time : float
+        Tracks real world time for the motion equations.
+    time_step : float
+        The value to increment `time` by after each frame of the
+        animation.
+    starting_ball_coords : tuple(int, int, int, int)
+        Coordinates of the ball when the animation started. 
+    time_to_total_frames_multiplier : int
+        Value to multiply `total_time` by to determine how many frames
+        the animation should take.
+    upc : int
+        Stands for 'unit to pixel conversion'. This value is used to
+        scale whatever unit the user uses to its pixel equivalent.
+        Allows ball to travel further on the screen.
+    """
 
     def __init__(self):
         super().__init__(

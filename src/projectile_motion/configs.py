@@ -6,10 +6,32 @@ from math import radians
 from animation import ProjectileMotionAnimation
 
 class ProjectileMotionConfigs(ttk.Frame):
+    """Holds interface to modify the animation.
+
+    This Frame widget holds the widgets and buttons that allow
+    the user to modify the animation as they wish.
+
+    animation : ProjectileMotionAnimation
+        Canvas widget that handles drawing the animation.
+    init_velocity : IntVar
+        Holds what user enters as their initial velocity of choice.
+    angle : IntVar
+        Holds what user enters as their angle of choice.
+    start_animation_btn : ttk.Button
+        Button that allows user to start the animation.
+    reset_ball_btn : ttk.Button
+        Button that allows user to bring the ball back to its default
+        position. 
+    """
 
     def __init__(self, animation: ProjectileMotionAnimation):
         super().__init__(width=1, height=1)
         self.animation = animation
+
+        self.init_velocity = IntVar()
+        self.angle = IntVar()
+        self.start_animation_btn = None  # Created in setup_configs()
+        self.reset_ball_btn = None
 
         # ttk.Style(self).configure('TFrame', background='pink')
         self.rowconfigure(0, weight=1)
@@ -23,14 +45,12 @@ class ProjectileMotionConfigs(ttk.Frame):
     def setup_configs(self) -> None:
         """Add the entry widgets to collect information"""
         # Widget to get initial velocity
-        self.init_velocity = IntVar()
         ttk.Label(self, text='Initial Velocity').grid(row=0, column=0, sticky='S')
         ttk.Spinbox(self, from_=0, to=9999,
                     textvariable=self.init_velocity).grid(row=1, column=0,
                                                          sticky='N')
 
         # Widget to get angle
-        self.angle = IntVar()
         ttk.Label(self, text='Angle').grid(row=0, column=1, sticky='S')
         ttk.Spinbox(self, from_=0, to=90,
                     textvariable=self.angle).grid(row=1,column=1, sticky='N')
