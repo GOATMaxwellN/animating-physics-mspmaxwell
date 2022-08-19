@@ -10,11 +10,16 @@ class ProjectileMotionAnimation(Canvas):
             width=1, height=1, highlightthickness=0, bg='skyblue')
         self.bind("<Configure>", self.on_resize)
 
-        self.floor_height = None
+        # Ball attributes
         self.ball = None
+        self.offset = 10
+        self.diameter = 50
+        # Floor attributes
         self.floor = None
+        self.floor_height = None
 
         # Variables during animation
+        self.animation_running = False
         self.h_vel = None
         self.v_vel = None
         self.time = None
@@ -45,8 +50,6 @@ class ProjectileMotionAnimation(Canvas):
 
     def draw_ball(self, resize = False):
         """Draw ball on top of the floor"""
-        diameter = 50
-        offset = 10
         # The -1 is added to raise it one pixel up from the floor so
         # that it lies flat on top of the floor, or else it would
         # dig into the floor one pixel
@@ -56,12 +59,19 @@ class ProjectileMotionAnimation(Canvas):
             tl_x, br_x = cur_ball_coords[0], cur_ball_coords[2]
             self.coords(
                 self.ball,
-                tl_x, self.floor_height-diameter-1,
+                tl_x, self.floor_height-self.diameter-1,
                 br_x, self.floor_height-1)
         else:
             self.ball = self.create_oval(
-                offset, self.floor_height-diameter-1,
-                offset+diameter, self.floor_height-1, fill='red')
+                self.offset, self.floor_height-self.diameter-1,
+                self.offset+self.diameter, self.floor_height-1, fill='red')
+
+    def reset_ball_position(self):
+        """Brings ball back to its default position"""
+        self.coords(
+                self.ball,
+                self.offset, self.floor_height-self.diameter-1,
+                self.offset+self.diameter, self.floor_height-1)
 
     def start_animation(self, init_vel, angle):
         """Starts the animation"""
@@ -78,6 +88,7 @@ class ProjectileMotionAnimation(Canvas):
 
         self.starting_ball_coords = self.coords(self.ball)
 
+        self.animation_running = True
         self.do_animation()
 
     def do_animation(self):
@@ -117,6 +128,19 @@ class ProjectileMotionAnimation(Canvas):
         self.no_of_frames = None
         self.total_no_of_frames = None
 
+    def abort_animation(self, msg = ""):
+        """Aborts the animation by bringing the ball back down to the
+        floor. Happens when the window is resized."""
+        self.reset_animation_vars()
+        self.reset_ball_position()
+
+        self.show_message(msg)
+
+    def show_message(self, msg):
+        """Adds some temporary text to the top left corner of the canvas"""
+        text = self.create_text(10, 10, text=msg, anchor=NW)
+        self.after(2000, lambda: self.delete(text))
+
     def on_resize(self, event):
         """Makes sure that the ball and floor are brought up to the
         bottom of the canvas upon resizing."""
@@ -124,3 +148,5 @@ class ProjectileMotionAnimation(Canvas):
             self.draw_floor(resize=True)
         if (self.ball is not None):
             self.draw_ball(resize=True)
+            if self.animation_running:
+                self.abort_animation("Animation aborted due to resize")
