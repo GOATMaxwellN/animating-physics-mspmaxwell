@@ -5,8 +5,10 @@ from math import radians
 
 class ProjectileMotionConfigs(ttk.Frame):
 
-    def __init__(self):
+    def __init__(self, animation):
         super().__init__(width=1, height=1)
+        self.animation = animation
+
         # ttk.Style(self).configure('TFrame', background='pink')
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=1)
@@ -32,13 +34,9 @@ class ProjectileMotionConfigs(ttk.Frame):
                     textvariable=self.angle).grid(row=1,column=1, sticky='N')
 
         # Button to start animation
-        self.start_animation_btn = ttk.Button(self, text='Start Animation')
+        self.start_animation_btn = ttk.Button(
+            self, text='Start Animation', command=self.start_animation)
         self.start_animation_btn.grid(row=0, column=2)
-
-    def set_button_command(self, do_animation):
-        """Set the 'Start Animation' button command to the function
-        that starts the animation"""
-        self.start_animation_btn.configure(command=do_animation)
 
     def get_init_velocity(self):
         return self.init_velocity.get()
@@ -46,4 +44,7 @@ class ProjectileMotionConfigs(ttk.Frame):
     def get_angle(self):
         return radians(self.angle.get())
 
-    
+    def start_animation(self):
+        init_vel = self.get_init_velocity()
+        angle = self.get_angle()
+        self.animation.start_animation(init_vel, angle)
