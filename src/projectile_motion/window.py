@@ -20,6 +20,7 @@ class MainWindow:
         sc_width, sc_height = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
         # self.root.geometry(f"{sc_width}x{sc_height}")
         self.root.state('zoomed')
+        self.root.minsize(512, 288)
 
         # Set grid weight
         self.root.rowconfigure(0, weight=4)
