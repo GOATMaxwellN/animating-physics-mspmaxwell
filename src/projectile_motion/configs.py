@@ -54,5 +54,19 @@ class ProjectileMotionConfigs(ttk.Frame):
         angle = self.get_angle()
         self.animation.start_animation(init_vel, angle)
 
+        # Disable the reset ball button first
+        self.reset_ball_btn.configure(state=DISABLED)
+        # Periodically check if the animation is still running so as
+        # to re-enable the 'Reset ball' button.
+        self.checkIfAnimationRunning() 
+
     def reset_ball_position(self):
         self.animation.reset_ball_position()
+
+    def checkIfAnimationRunning(self):
+        # If animation is still running, check again a bit later
+        if self.animation.animation_running:
+            self.after(500, self.checkIfAnimationRunning)
+        else:
+            # Re-enable the reset ball button
+            self.reset_ball_btn.configure(state=ACTIVE)
