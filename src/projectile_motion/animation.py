@@ -8,9 +8,11 @@ class ProjectileMotionAnimation(Canvas):
     def __init__(self):
         super().__init__(
             width=1, height=1, highlightthickness=0, bg='skyblue')
+        self.bind("<Configure>", self.on_resize)
 
         self.floor_height = None
         self.ball = None
+        self.floor = None
 
         # Variables during animation
         self.h_vel = None
@@ -30,24 +32,36 @@ class ProjectileMotionAnimation(Canvas):
         self.draw_floor()
         self.draw_ball()
     
-    def draw_floor(self):
+    def draw_floor(self, resize = False):
         """Draw floor of the projectile motion animation"""
         w, h = self.winfo_width(), self.winfo_height()
         # Set floor height
         self.floor_height = h - 10
-        self.create_rectangle(
-            0, self.floor_height, w, h, fill='sienna3', outline='sienna3')
+        if resize:
+            self.coords(self.floor, 0, self.floor_height, w, h)
+        else:
+            self.floor = self.create_rectangle(
+                0, self.floor_height, w, h, fill='sienna3', outline='sienna3')
 
-    def draw_ball(self):
+    def draw_ball(self, resize = False):
         """Draw ball on top of the floor"""
         diameter = 50
         offset = 10
         # The -1 is added to raise it one pixel up from the floor so
         # that it lies flat on top of the floor, or else it would
         # dig into the floor one pixel
-        self.ball = self.create_oval(
-            offset, self.floor_height-diameter-1,
-            offset+diameter, self.floor_height-1, fill='red')
+        if resize:
+            cur_ball_coords = self.coords(self.ball)
+            # Retain x coordinates. We only change y coordinates upon resize.
+            tl_x, br_x = cur_ball_coords[0], cur_ball_coords[2]
+            self.coords(
+                self.ball,
+                tl_x, self.floor_height-diameter-1,
+                br_x, self.floor_height-1)
+        else:
+            self.ball = self.create_oval(
+                offset, self.floor_height-diameter-1,
+                offset+diameter, self.floor_height-1, fill='red')
 
     def start_animation(self, init_vel, angle):
         """Starts the animation"""
@@ -63,6 +77,7 @@ class ProjectileMotionAnimation(Canvas):
         self.time = self.time_step
 
         self.starting_ball_coords = self.coords(self.ball)
+
         self.do_animation()
 
     def do_animation(self):
@@ -93,6 +108,7 @@ class ProjectileMotionAnimation(Canvas):
         self.after(1000//30, self.do_animation)
 
     def reset_animation_vars(self):
+        self.animation_running = False
         self.h_vel = None
         self.v_vel = None
         self.time = None
@@ -100,3 +116,11 @@ class ProjectileMotionAnimation(Canvas):
         self.time_step = None
         self.no_of_frames = None
         self.total_no_of_frames = None
+
+    def on_resize(self, event):
+        """Makes sure that the ball and floor are brought up to the
+        bottom of the canvas upon resizing."""
+        if self.floor is not None:
+            self.draw_floor(resize=True)
+        if (self.ball is not None):
+            self.draw_ball(resize=True)
