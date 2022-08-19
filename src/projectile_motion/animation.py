@@ -3,6 +3,7 @@ happen"""
 from tkinter import *
 from math import sin, cos
 
+
 class ProjectileMotionAnimation(Canvas):
 
     def __init__(self):

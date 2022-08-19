@@ -3,8 +3,6 @@
 from animation import ProjectileMotionAnimation
 from configs import ProjectileMotionConfigs
 
-from math import radians, sin, cos
-
 
 class MainWindow:
 
