@@ -31,13 +31,13 @@ class ProjectileMotionAnimation(Canvas):
         self.time_to_total_frames_multiplier = 20
         self.upc = 5  # unit to pixel conversion
 
-    def setup_canvas(self):
+    def setup_canvas(self) -> None:
         """Draw all needed components for the projectile motion 
         animation"""
         self.draw_floor()
         self.draw_ball()
     
-    def draw_floor(self, resize = False):
+    def draw_floor(self, resize = False) -> None:
         """Draw floor of the projectile motion animation"""
         w, h = self.winfo_width(), self.winfo_height()
         # Set floor height
@@ -48,7 +48,7 @@ class ProjectileMotionAnimation(Canvas):
             self.floor = self.create_rectangle(
                 0, self.floor_height, w, h, fill='sienna3', outline='sienna3')
 
-    def draw_ball(self, resize = False):
+    def draw_ball(self, resize = False) -> None:
         """Draw ball on top of the floor"""
         # The -1 is added to raise it one pixel up from the floor so
         # that it lies flat on top of the floor, or else it would
@@ -66,14 +66,14 @@ class ProjectileMotionAnimation(Canvas):
                 self.offset, self.floor_height-self.diameter-1,
                 self.offset+self.diameter, self.floor_height-1, fill='red')
 
-    def reset_ball_position(self):
+    def reset_ball_position(self) -> None:
         """Brings ball back to its default position"""
         self.coords(
                 self.ball,
                 self.offset, self.floor_height-self.diameter-1,
                 self.offset+self.diameter, self.floor_height-1)
 
-    def start_animation(self, init_vel, angle):
+    def start_animation(self, init_vel: int, angle: int) -> None:
         """Starts the animation"""
         self.h_vel = init_vel * cos(angle)
         self.v_vel = init_vel * sin(angle)
@@ -91,7 +91,7 @@ class ProjectileMotionAnimation(Canvas):
         self.animation_running = True
         self.do_animation()
 
-    def do_animation(self):
+    def do_animation(self) -> None:
         """Completes one frame of the animation and calls for the next one"""
         if self.no_of_frames == self.total_no_of_frames:
             self.reset_animation_vars()
@@ -118,7 +118,7 @@ class ProjectileMotionAnimation(Canvas):
         self.time += self.time_step
         self.after(1000//30, self.do_animation)
 
-    def reset_animation_vars(self):
+    def reset_animation_vars(self) -> None:
         self.animation_running = False
         self.h_vel = None
         self.v_vel = None
@@ -128,7 +128,7 @@ class ProjectileMotionAnimation(Canvas):
         self.no_of_frames = None
         self.total_no_of_frames = None
 
-    def abort_animation(self, msg = ""):
+    def abort_animation(self, msg: str = "") -> None:
         """Aborts the animation by bringing the ball back down to the
         floor. Happens when the window is resized."""
         self.reset_animation_vars()
@@ -136,12 +136,12 @@ class ProjectileMotionAnimation(Canvas):
 
         self.show_message(msg)
 
-    def show_message(self, msg):
+    def show_message(self, msg: str) -> None:
         """Adds some temporary text to the top left corner of the canvas"""
         text = self.create_text(10, 10, text=msg, anchor=NW)
         self.after(2000, lambda: self.delete(text))
 
-    def on_resize(self, event):
+    def on_resize(self, event) -> None:
         """Makes sure that the ball and floor are brought up to the
         bottom of the canvas upon resizing."""
         if self.floor is not None:

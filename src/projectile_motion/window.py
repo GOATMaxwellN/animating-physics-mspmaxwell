@@ -1,12 +1,12 @@
 """Module that holds the main window"""
-
+from tkinter import Tk
 from animation import ProjectileMotionAnimation
 from configs import ProjectileMotionConfigs
 
 
 class MainWindow:
 
-    def __init__(self, root):
+    def __init__(self, root: Tk):
         self.root = root  # root is the Tk instance
         self.animation = ProjectileMotionAnimation()  # canvas that will show the animation
         # provides us with parameters of projectile motion (velocity, angle)

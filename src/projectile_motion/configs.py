@@ -3,9 +3,11 @@ from tkinter import *
 from tkinter import ttk
 from math import radians
 
+from animation import ProjectileMotionAnimation
+
 class ProjectileMotionConfigs(ttk.Frame):
 
-    def __init__(self, animation):
+    def __init__(self, animation: ProjectileMotionAnimation):
         super().__init__(width=1, height=1)
         self.animation = animation
 
@@ -18,7 +20,7 @@ class ProjectileMotionConfigs(ttk.Frame):
         # Add entry widgets to collect projectile motion info
         self.setup_configs()
 
-    def setup_configs(self):
+    def setup_configs(self) -> None:
         """Add the entry widgets to collect information"""
         # Widget to get initial velocity
         self.init_velocity = IntVar()
@@ -43,13 +45,13 @@ class ProjectileMotionConfigs(ttk.Frame):
             self, text="Reset ball", command=self.reset_ball_position)
         self.reset_ball_btn.grid(row=1, column=2)
 
-    def get_init_velocity(self):
+    def get_init_velocity(self) -> int:
         return self.init_velocity.get()
 
-    def get_angle(self):
+    def get_angle(self) -> int:
         return radians(self.angle.get())
 
-    def start_animation(self):
+    def start_animation(self) -> None:
         init_vel = self.get_init_velocity()
         angle = self.get_angle()
         self.animation.start_animation(init_vel, angle)
@@ -60,10 +62,10 @@ class ProjectileMotionConfigs(ttk.Frame):
         # to re-enable the 'Reset ball' button.
         self.checkIfAnimationRunning() 
 
-    def reset_ball_position(self):
+    def reset_ball_position(self) -> None:
         self.animation.reset_ball_position()
 
-    def checkIfAnimationRunning(self):
+    def checkIfAnimationRunning(self) -> None:
         # If animation is still running, check again a bit later
         if self.animation.animation_running:
             self.after(500, self.checkIfAnimationRunning)
