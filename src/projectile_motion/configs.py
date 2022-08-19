@@ -38,6 +38,11 @@ class ProjectileMotionConfigs(ttk.Frame):
             self, text='Start Animation', command=self.start_animation)
         self.start_animation_btn.grid(row=0, column=2)
 
+        # Button to reset ball position (place ball back into default position)
+        self.reset_ball_btn = ttk.Button(
+            self, text="Reset ball", command=self.reset_ball_position)
+        self.reset_ball_btn.grid(row=1, column=2)
+
     def get_init_velocity(self):
         return self.init_velocity.get()
 
@@ -48,3 +53,6 @@ class ProjectileMotionConfigs(ttk.Frame):
         init_vel = self.get_init_velocity()
         angle = self.get_angle()
         self.animation.start_animation(init_vel, angle)
+
+    def reset_ball_position(self):
+        self.animation.reset_ball_position()
