@@ -100,7 +100,7 @@ class ProjectileMotionConfigs(ttk.Frame):
         # This is initially disabled and is only enabled when an
         # animation is running.
         self.abort_animation_btn = add_button(
-            "Abort Animation", self.abort_animation, state=DISABLED)
+            "Abort Animation", self.abort_animation, state="disabled")
 
     def get_init_velocity(self) -> int:
         return self.init_velocity.get()
@@ -115,9 +115,9 @@ class ProjectileMotionConfigs(ttk.Frame):
 
         # Disable the 'reset ball' button and 'start animation' button
         # and enable the 'abort animation' button.
-        self.reset_ball_btn.configure(state=DISABLED)
-        self.start_animation_btn.configure(state=DISABLED)
-        self.abort_animation_btn.configure(state=NORMAL)
+        self.reset_ball_btn.configure(state="disabled")
+        self.start_animation_btn.configure(state="disabled")
+        self.abort_animation_btn.configure(state="normal")
         # Periodically check if the animation is still running so as
         # to re-enable -> ('start', 'reset') and disable 'abort'.
         self.checkIfAnimationRunning() 
@@ -135,6 +135,6 @@ class ProjectileMotionConfigs(ttk.Frame):
         else:
             # Re-enable the 'reset ball' and 'start animation' button
             # and disable the 'abort animation' button.
-            self.reset_ball_btn.configure(state=NORMAL)
-            self.start_animation_btn.configure(state=NORMAL)
-            self.abort_animation_btn.configure(state=DISABLED)
+            self.reset_ball_btn.configure(state="normal")
+            self.start_animation_btn.configure(state="normal")
+            self.abort_animation_btn.configure(state="disabled")
