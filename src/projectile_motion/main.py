@@ -2,7 +2,7 @@
 from tkinter import Tk
 from window import MainWindow
 
-def main():
+def main() -> None:
     tk = Tk()
     MainWindow(tk)
     tk.mainloop()    
