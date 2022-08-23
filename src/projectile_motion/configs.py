@@ -2,6 +2,7 @@
 from tkinter import *
 from tkinter import ttk
 from math import radians
+from typing import Callable
 
 from animation import ProjectileMotionAnimation
 
@@ -55,15 +56,47 @@ class ProjectileMotionConfigs(ttk.Frame):
         ttk.Spinbox(self, from_=0, to=90,
                     textvariable=self.angle).grid(row=1,column=1, sticky='N')
 
+        # Add the 'start', 'reset', and 'abort' buttons
+        self.create_buttons_frame()
+
+    def create_buttons_frame(self) -> None:
+        """Creates a Frame which holds the three main buttons.
+        
+        Creates a Frame with its own grid, adds it the configs frame,
+        and places the 'start', 'reset', and 'abort' buttons in it"""
+
+        def add_button(text: str,
+                       command: Callable[[], None]) -> ttk.Button:
+            """Adds a button to the buttons_frame.
+            
+            text : str
+                Text shown on the button.
+            command : func
+                Function called when button is clicked."""
+            btn = ttk.Button(buttons_frame, text=text, command=command)
+            btn.pack(side=TOP, pady=(2,0), ipadx=5, ipady=2)
+            return btn
+
+        # Create the frame, add it to the Configs frame and set up
+        # its grid.
+        buttons_frame = ttk.Frame(self)
+        buttons_frame.grid(row=0, column=2, rowspan=2)
+        for i in range(3):
+            buttons_frame.rowconfigure(i, weight=1)
+        buttons_frame.columnconfigure(0, weight=1)
+        
+        # Add the three buttons to the frame
         # Button to start animation
-        self.start_animation_btn = ttk.Button(
-            self, text='Start Animation', command=self.start_animation)
-        self.start_animation_btn.grid(row=0, column=2)
+        self.start_animation_btn = add_button(
+            "Start Animation", self.start_animation)
 
         # Button to reset ball position (place ball back into default position)
-        self.reset_ball_btn = ttk.Button(
-            self, text="Reset ball", command=self.reset_ball_position)
-        self.reset_ball_btn.grid(row=1, column=2)
+        self.reset_ball_btn = add_button(
+            "Reset Animation", self.reset_ball_position)
+
+        # Button to abort a running animation    
+        self.abort_animation_btn = add_button(
+            "Abort Animation", self.abort_animation)        
 
     def get_init_velocity(self) -> int:
         return self.init_velocity.get()
@@ -85,6 +118,9 @@ class ProjectileMotionConfigs(ttk.Frame):
 
     def reset_ball_position(self) -> None:
         self.animation.reset_ball_position()
+
+    def abort_animation(self) -> None:
+        ...
 
     def checkIfAnimationRunning(self) -> None:
         # If animation is still running, check again a bit later
