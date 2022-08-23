@@ -49,7 +49,7 @@ class ProjectileMotionConfigs(ttk.Frame):
         ttk.Label(self, text='Initial Velocity').grid(row=0, column=0, sticky='S')
         ttk.Spinbox(self, from_=0, to=9999,
                     textvariable=self.init_velocity).grid(row=1, column=0,
-                                                         sticky='N')
+                                                          sticky='N')
 
         # Widget to get angle
         ttk.Label(self, text='Angle').grid(row=0, column=1, sticky='S')
@@ -66,14 +66,16 @@ class ProjectileMotionConfigs(ttk.Frame):
         and places the 'start', 'reset', and 'abort' buttons in it"""
 
         def add_button(text: str,
-                       command: Callable[[], None]) -> ttk.Button:
+                       command: Callable[[], None],
+                       state: str = "normal") -> ttk.Button:
             """Adds a button to the buttons_frame.
             
             text : str
                 Text shown on the button.
             command : func
                 Function called when button is clicked."""
-            btn = ttk.Button(buttons_frame, text=text, command=command)
+            btn = ttk.Button(
+                buttons_frame, text=text, command=command, state=state)
             btn.pack(side=TOP, pady=(2,0), ipadx=5, ipady=2)
             return btn
 
@@ -85,18 +87,20 @@ class ProjectileMotionConfigs(ttk.Frame):
             buttons_frame.rowconfigure(i, weight=1)
         buttons_frame.columnconfigure(0, weight=1)
         
-        # Add the three buttons to the frame
-        # Button to start animation
+        # Add the three buttons to the frame.
+        # Button to start animation.
         self.start_animation_btn = add_button(
             "Start Animation", self.start_animation)
 
-        # Button to reset ball position (place ball back into default position)
+        # Button to reset ball position (place ball back into default position).
         self.reset_ball_btn = add_button(
             "Reset Animation", self.reset_ball_position)
 
-        # Button to abort a running animation    
+        # Button to abort a running animation.
+        # This is initially disabled and is only enabled when an
+        # animation is running.
         self.abort_animation_btn = add_button(
-            "Abort Animation", self.abort_animation)        
+            "Abort Animation", self.abort_animation, state=DISABLED)
 
     def get_init_velocity(self) -> int:
         return self.init_velocity.get()
@@ -109,18 +113,20 @@ class ProjectileMotionConfigs(ttk.Frame):
         angle = self.get_angle()
         self.animation.start_animation(init_vel, angle)
 
-        # Disable the reset ball button and start animation button
+        # Disable the 'reset ball' button and 'start animation' button
+        # and enable the 'abort animation' button.
         self.reset_ball_btn.configure(state=DISABLED)
         self.start_animation_btn.configure(state=DISABLED)
+        self.abort_animation_btn.configure(state=NORMAL)
         # Periodically check if the animation is still running so as
-        # to re-enable the two buttons.
+        # to re-enable -> ('start', 'reset') and disable 'abort'.
         self.checkIfAnimationRunning() 
 
     def reset_ball_position(self) -> None:
         self.animation.reset_ball_position()
 
     def abort_animation(self) -> None:
-        ...
+        self.animation.abort_animation("Manually aborted the animation")
 
     def checkIfAnimationRunning(self) -> None:
         # If animation is still running, check again a bit later
@@ -128,5 +134,7 @@ class ProjectileMotionConfigs(ttk.Frame):
             self.after(500, self.checkIfAnimationRunning)
         else:
             # Re-enable the 'reset ball' and 'start animation' button
-            self.reset_ball_btn.configure(state=ACTIVE)
-            self.start_animation_btn.configure(state=ACTIVE)
+            # and disable the 'abort animation' button.
+            self.reset_ball_btn.configure(state=NORMAL)
+            self.start_animation_btn.configure(state=NORMAL)
+            self.abort_animation_btn.configure(state=DISABLED)
