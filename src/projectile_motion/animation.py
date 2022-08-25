@@ -128,7 +128,7 @@ class ProjectileMotionAnimation(Canvas):
         """Starts the animation"""
         self.h_vel = init_vel * cos(angle)
         self.v_vel = init_vel * sin(angle)
-        self.g = 9.8
+        self.g = 9.8 * self.upc
         self.total_time = self.v_vel / ((1/2)*self.g)
 
         self.no_of_frames = 0
