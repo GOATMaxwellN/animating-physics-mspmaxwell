@@ -103,12 +103,17 @@ class ProjectileMotionConfigs(ttk.Frame):
             "Abort Animation", self.abort_animation, state="disabled")
 
     def get_init_velocity(self) -> int:
+        """Returns the value that user places for initial velocity"""
         return self.init_velocity.get()
 
     def get_angle(self) -> int:
+        """Returns the value that user places for angle"""
         return radians(self.angle.get())
 
     def start_animation(self) -> None:
+        """Starts the animation.
+        
+        This is called by the 'Start Animation' button to start the animation."""
         init_vel = self.get_init_velocity()
         angle = self.get_angle()
         self.animation.start_animation(init_vel, angle)
@@ -123,12 +128,18 @@ class ProjectileMotionConfigs(ttk.Frame):
         self.checkIfAnimationRunning() 
 
     def reset_ball_position(self) -> None:
+        """Brings ball back to its starting position."""
         self.animation.reset_ball_position()
 
     def abort_animation(self) -> None:
+        """Aborts a running animation.
+        
+        This call to abort_animation lets the user know that the animation
+        was manually aborted."""
         self.animation.abort_animation("Manually aborted the animation")
 
     def checkIfAnimationRunning(self) -> None:
+        """Checks if there is an animation running"""
         # If animation is still running, check again a bit later
         if self.animation.animation_running:
             self.after(500, self.checkIfAnimationRunning)
